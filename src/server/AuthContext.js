@@ -7,10 +7,10 @@ import { child, get, ref } from "firebase/database";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    // const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState(null);
     const dbRef = ref(db);
-
+    console.log(dbRef, "dbRef")
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -24,22 +24,25 @@ export const AuthProvider = ({ children }) => {
                 } else {
                   console.log("No data available");
                 }
+                setLoading(false);
               }).catch((error) => {
                 console.error(error);
               });
+              setLoading(false);
               setCurrentUser(null);
               // ...
             } else {
               // User is signed out
               // ...
+              setLoading(false);
               setCurrentUser(null);
             }
         });
     },[])
 
-    // if (loading) {
-    //     return <p>Loading...</p>;
-    // }
+    if (loading) {
+        return <p>Loading...</p>;
+    }
     return (
         <AuthContext.Provider value={{ currentUser }}>
           {children}

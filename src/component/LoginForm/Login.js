@@ -19,7 +19,7 @@ function Login() {
         // eslint-disable-next-line
         navigate('/');
       }
-    },[currentUser])
+    },[currentUser, navigate])
     
     const handleSignIn = () => {
       console.log(currentUser, 'userrrr...')
@@ -36,6 +36,7 @@ function Login() {
           position: 'top-right'
         })
         console.log(user)
+        navigate('/');
         // ...
       })
       .catch((error) => {

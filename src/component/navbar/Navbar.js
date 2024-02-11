@@ -7,7 +7,7 @@ function Navbar() {
 
   const [currentTime, setCurrentTime] = React.useState("");
   const { currentUser } = useContext(AuthContext);
-  const [signOut, setShowSignOut] = useState(true);
+  const [signOut, setShowSignOut] = useState(false);
 
   useEffect(()=>{
 

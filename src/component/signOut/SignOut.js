@@ -18,7 +18,7 @@ export default function SignOut({userName, setShowSignOut}) {
     }
 
     return (
-        <div className='bg-white w-screen h-screen absolute z-10 top-0 bg-transparent' onClick={() => setShowSignOut(false)}>
+        <div className='w-screen h-screen absolute z-10 top-0 bg-transparent' onClick={() => setShowSignOut(false)}>
             <div className='bg-white absolute z-50 top-12 right-3 rounded p-2'>
                 <div className='flex flex-col items-center'>
                     <span>{userName}</span>
