@@ -21,10 +21,6 @@ function App() {
 
   // const notify = () => toast("Wow so easy!");
 
-  useEffect(() => {
-
-  },[])
-
   return (
     <>
         <div className="App">
