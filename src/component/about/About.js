@@ -1,18 +1,31 @@
 import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../server/AuthContext';
-import { startMeeting } from '../../server/createOrJoinRoom';
+import { push, ref, set } from 'firebase/database';
+import { db } from '../../server/firebase';
 // import { createBrowserHistory } from 'history';
 
 function About() {
   const { currentUser } = useContext(AuthContext);
-  // let history = createBrowserHistory();
   const navigate = useNavigate();
-  console.log(currentUser, "fname")
+
 
   const handleStartMeeting = () => {
-    const roomId = startMeeting();
-    navigate(`/v-meet/roomId/${roomId}`);
+    const roomsRef = ref(db, 'rooms'); // Reference to the 'rooms' node in the database
+    // Push a new room under 'rooms' to generate a unique room ID
+    const newRoomRef = push(roomsRef);
+    const roomId = newRoomRef.key; 
+    // Set initial room data if needed
+    set(newRoomRef, {
+      createdAt: new Date().toISOString(),
+      // Add any additional initial data for the room
+    }).then(() => {
+      // Navigate to the new room URL
+      navigate(`/v-meet/roomId/${roomId}`);
+    }).catch((error) => {
+      console.error("Error creating room: ", error);
+    });
+    // navigate("/v-meet/roomId/" + roomId);
   }
 
   return (

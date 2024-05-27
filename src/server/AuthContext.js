@@ -3,6 +3,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useEffect, useState } from "react";
 import { auth, db } from "./firebase";
 import { child, get, ref } from "firebase/database";
+// import { startMeeting } from "./createOrJoinRoom";
 
 export const AuthContext = createContext();
 
@@ -10,7 +11,6 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState(null);
     const dbRef = ref(db);
-    console.log(dbRef, "dbRef")
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -19,17 +19,18 @@ export const AuthProvider = ({ children }) => {
               const uid = user.uid;
               get(child(dbRef, `users/${uid}`)).then((snapshot) => {
                 if (snapshot.exists()) {
-                  console.log(snapshot.val());
+                  // console.log(snapshot.val());
                   setCurrentUser({...user, ...snapshot.val()});
                 } else {
                   console.log("No data available");
+                  setCurrentUser(null);
                 }
                 setLoading(false);
               }).catch((error) => {
+                setLoading(false);
                 console.error(error);
+                setCurrentUser(null);
               });
-              setLoading(false);
-              setCurrentUser(null);
               // ...
             } else {
               // User is signed out
