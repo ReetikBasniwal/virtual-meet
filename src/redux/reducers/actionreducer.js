@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     user: null,
-    participants: []
+    participants: {}
 };
 
 const actionSlice = createSlice({
@@ -14,10 +14,18 @@ const actionSlice = createSlice({
         },
         addParticipant: (state, action) => {
             // ADD A KEY 'CURRENT_USER' AS TRUE IN THE PARTICIPANT IF THE PARTICIPANT IS CURRENT USER
-            state.participants = [...state.participants, action.payload];
+            let currentUserId = Object.keys(state.user)[0];
+            let participantId = Object.keys(action.payload)[0];
+            if( currentUserId === participantId){
+                action.payload[participantId].currentUser = true;
+            }
+            state.participants = {
+                ...state.participants, 
+                ...action.payload
+            };
         },
         removeParticipant: (state, action) => {
-            state.currentUser = action.payload;
+            delete state.participants[action.payload.participantKey];
         }
     }
 })

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AuthContext } from '../../server/AuthContext';
-import { child, get, onDisconnect, onValue, push, ref, update } from 'firebase/database';
+import { child, get, onChildAdded, onChildRemoved, onDisconnect, onValue, push, ref, update } from 'firebase/database';
 import { db } from '../../server/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { roomActions } from '../../redux/reducers/actionreducer';
@@ -15,7 +15,7 @@ export default function Room() {
     const { currentUser } = useContext(AuthContext);
     const dispatch = useDispatch();
 
-    const { user } = useSelector(state => state.roomReducer);
+    const { user, participants } = useSelector(state => state.roomReducer);
 
     const dbRef = ref(db);
     const roomRef = ref(db, `rooms/${id}`);
@@ -23,7 +23,7 @@ export default function Room() {
 
     useEffect(() => {
         if(!currentUser){
-            navigate('/v-meet/sign-in');
+            navigate('/sign-in');
         }else {
             setLoading(false);
         }
@@ -34,7 +34,7 @@ export default function Room() {
     useEffect(() => {
       if(!id || !currentUser) return;
 
-      const addParticipant = async () => {
+      const addUserInTheRoom = async () => {
         try { 
           const roomSnapshot = await get(roomRef);
           console.log(roomSnapshot, 'snap')
@@ -75,20 +75,34 @@ export default function Room() {
         }
       };
   
-      // const unsubscribe = onValue(participantsRef, (snapshot) => {
-      //   if (snapshot.exists()) {
-      //     // will remove the user from the room
-      //   } else {
-      //     // 
-      //   }
-      // });
-  
-      addParticipant();
-  
-      // return () => {
-      //   unsubscribe();
-      // };
-    },[id, currentUser.firstName, currentUser.lastName, currentUser.uid])
+      addUserInTheRoom();
+
+    },[id, currentUser])
+
+    useEffect(() => {
+      if(!user) return;
+
+      const unsubscribeonChildAdded = onChildAdded(participantsRef, (snapshot) => {
+        const participantData = snapshot.val();
+        dispatch(roomActions.addParticipant({
+          [snapshot.key]: {
+            userName: participantData.userName,
+            ...participantData.preference
+          }
+        }));
+      });
+
+      const unsubscribeonChildRemoved = onChildRemoved(participantsRef, (snapshot) => {
+        const participantData = snapshot.val();
+        dispatch(roomActions.removeParticipant({ participantKey: snapshot.key }));
+      });
+
+      return () => { 
+        unsubscribeonChildAdded();
+        unsubscribeonChildRemoved();
+      }        
+
+    },[user])
 
   if(loading){
       return <span className='text-white'>Loading....</span>
@@ -96,7 +110,7 @@ export default function Room() {
 
   return (
     <div className='w-screen h-screen bg-white border-2 border-rose-500'>
-      {currentUser?.firstName}
+      {JSON.stringify(user)} {JSON.stringify(participants)}
     </div>
   )
 }
