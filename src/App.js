@@ -20,12 +20,12 @@ function App() {
         <div className="App">
           <Navbar />
           <Routes>
-            <Route exact path='/v-meet/sign-up' element={<RegisterForm />} />
-            <Route exact path='/v-meet/sign-in' element={<Login />} />
+            <Route exact path='/sign-up' element={<RegisterForm />} />
+            <Route exact path='/sign-in' element={<Login />} />
             <Route path='/' element={<About />} />
-            <Route path='/v-meet/roomId/:id' element={<Room />} />
-            <Route path='/v-meet/roomId/:id/noroom' element={<FourOFour />} />
-            <Route path='/v-meet/error/:name' element={<WentWrong />} />
+            <Route path='/roomId/:id' element={<Room />} />
+            <Route path='/roomId/:id/noroom' element={<FourOFour />} />
+            <Route path='/error/:name' element={<WentWrong />} />
           </Routes>
         </div>
     </>

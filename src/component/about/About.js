@@ -21,11 +21,11 @@ function About() {
       // Add any additional initial data for the room
     }).then(() => {
       // Navigate to the new room URL
-      navigate(`/v-meet/roomId/${roomId}`);
+      navigate(`/roomId/${roomId}`);
     }).catch((error) => {
       console.error("Error creating room: ", error);
     });
-    // navigate("/v-meet/roomId/" + roomId);
+    // navigate("/roomId/" + roomId);
   }
 
   return (
@@ -34,7 +34,7 @@ function About() {
         <div className='flex items-center flex-col'>
           {currentUser && <span className='text-blue-400 italic text-4xl'>Hi {currentUser.firstName} !</span>}
           <span className='text-center text-blue-400 italic text-3xl'>Empower face-to-face connections from anywhere with V Meet!</span>
-          {!currentUser && <Link className='rounded pt-1 pb-1 pr-2 pl-2 mt-6 text-2xl font-medium bg-blue-300 w-fit text-slate-600' to='/v-meet/sign-up'>Sign Up</Link>}
+          {!currentUser && <Link className='rounded pt-1 pb-1 pr-2 pl-2 mt-6 text-2xl font-medium bg-blue-300 w-fit text-slate-600' to='/sign-up'>Sign Up</Link>}
           {currentUser && <button className='rounded pt-1 pb-1 pr-2 pl-2 mt-6 text-2xl font-medium bg-slate-300 w-fit text-slate-600' onClick={handleStartMeeting}>Start a meet</button>}
         </div>
       </div>
