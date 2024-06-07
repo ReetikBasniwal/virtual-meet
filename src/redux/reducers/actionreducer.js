@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     user: null,
-    participants: {}
+    participants: {},
+    isActiveRoom: false,
 };
 
 const actionSlice = createSlice({
@@ -26,6 +27,9 @@ const actionSlice = createSlice({
         },
         removeParticipant: (state, action) => {
             delete state.participants[action.payload.participantKey];
+        },
+        setisRoomActive: (state, action) => {
+            state.isActiveRoom = action.payload;
         }
     }
 })

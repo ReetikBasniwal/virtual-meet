@@ -8,14 +8,17 @@ import Login from './component/LoginForm/Login';
 import Room from './component/meetingRoom/Room';
 import FourOFour from './pages/FourOFour';
 import WentWrong from './pages/WentWrong';
+import { useSelector } from 'react-redux';
 
 
 function App() {
 
+  const isActiveRoom = useSelector(state => state.roomReducer.isActiveRoom);
+
   return (
     <>
         <div className="App">
-          <Navbar />
+          {!isActiveRoom ? <Navbar /> : <></>}
           <Routes>
             <Route exact path='/sign-up' element={<RegisterForm />} />
             <Route exact path='/sign-in' element={<Login />} />

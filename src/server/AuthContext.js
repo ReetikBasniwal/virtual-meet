@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
               setCurrentUser(null);
             }
         });
-    },[])
+    },[dbRef])
 
     if (loading) {
         return <p>Loading...</p>;

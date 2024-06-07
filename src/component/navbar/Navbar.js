@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../server/AuthContext';
 import SignOut from '../signOut/SignOut';
+import { useSelector } from 'react-redux';
 
 
 function Navbar() {
@@ -8,6 +9,8 @@ function Navbar() {
   const [currentTime, setCurrentTime] = React.useState("");
   const { currentUser } = useContext(AuthContext);
   const [signOut, setShowSignOut] = useState(false);
+
+  const { isActiveRoom } = useSelector((state) => state.roomReducer);
 
   useEffect(()=>{
 
@@ -35,21 +38,25 @@ function Navbar() {
 
   return (
     <>
-      <nav className="flex items-center justify-between mt-2 mr-2 ml-2" style={{background: '#282c34'}}>
-        <div className='text-4xl text-blue-400'>V Meet</div>
-        <div className='flex items-center'>
-          <div className='text-xl text-blue-400 mr-4'>{currentTime}</div>
+      {isActiveRoom ? <></> : (
+        <>
+        <nav className="flex items-center justify-between mt-2 mr-2 ml-2" style={{background: '#282c34'}}>
+          <div className='text-4xl text-blue-400'>V Meet</div>
+          <div className='flex items-center'>
+            <div className='text-xl text-blue-400 mr-4'>{currentTime}</div>
 
-          {/* USER LOGO */}
-          {
-            currentUser && <div className='flex items-center justify-center text-white bg-slate-600 border rounded-2xl border-sky-500 cursor-pointer' 
-                                style={{width: '2em', height: '2em'}}  onClick={() => setShowSignOut(true)}>
-              <span>{currentUser.firstName[0].toUpperCase()}</span>
-            </div>
-          }
-        </div>
-      </nav>
-      {currentUser && signOut && <SignOut userName={currentUser.firstName +" " + currentUser.lastName} setShowSignOut={setShowSignOut}/>}
+            {/* USER LOGO */}
+            {
+              currentUser && <div className='flex items-center justify-center text-white bg-slate-600 border rounded-2xl border-sky-500 cursor-pointer' 
+                                  style={{width: '2em', height: '2em'}}  onClick={() => setShowSignOut(true)}>
+                <span>{currentUser.firstName[0].toUpperCase()}</span>
+              </div>
+            }
+          </div>
+        </nav>
+        {currentUser && signOut && <SignOut userName={currentUser.firstName +" " + currentUser.lastName} setShowSignOut={setShowSignOut}/>}
+        </>
+      )}
     </>
     
   )

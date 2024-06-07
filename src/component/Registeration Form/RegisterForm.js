@@ -24,7 +24,7 @@ function RegisterForm() {
              // eslint-disable-next-line
             navigate('/');
         }
-    }, [currentUser])
+    }, [currentUser, navigate])
     // const auth = getAuth();
 
     const handleSubmit = () => {
