@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AuthContext } from '../../server/AuthContext';
-import { child, get, onChildAdded, onChildRemoved, onDisconnect, push, ref, set, onValue, update } from 'firebase/database';
+import { child, get, onChildAdded, onChildRemoved, onDisconnect, push, ref, onValue, update } from 'firebase/database';
 import { db } from '../../server/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { roomActions } from '../../redux/reducers/actionreducer';
@@ -88,7 +88,7 @@ export default function Room() {
         dispatch(roomActions.setisRoomActive(false));
       }
 
-      
+      // eslint-disable-next-line
     },[id, currentUser, dispatch, navigate ])
 
     useEffect(() => {
@@ -120,7 +120,7 @@ export default function Room() {
   }
 
   return (
-    <div className='w-screen h-screen border-2 border-rose-500'>
+    <div className='w-screen h-screen'>
       {/* {JSON.stringify(user)} {JSON.stringify(participants)} */}
       <MainScreen />
     </div>

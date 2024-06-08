@@ -20,6 +20,7 @@ const actionSlice = createSlice({
             if( currentUserId === participantId){
                 action.payload[participantId].currentUser = true;
             }
+            action.payload[participantId].avatarColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
             state.participants = {
                 ...state.participants, 
                 ...action.payload

@@ -1,0 +1,13 @@
+.meetingIcons {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+    color: white;
+    background: rgb(88, 86, 86);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 10px;
+}

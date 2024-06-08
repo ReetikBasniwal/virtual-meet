@@ -1,0 +1,60 @@
+.participant {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border: 0.5rem;
+    min-height: 200px;
+}
+
+.video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: absolute;
+    font-size: 9rem;
+}
+
+.muted {
+    color: white;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.1rem;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(88, 86, 86);
+}
+
+.name {
+    position: absolute;
+    color: white;
+    bottom: 1rem;
+    left: 1rem;
+}
+
+
+@media (max-width: 800px){
+    .participant {
+        min-height: 0px;
+    }
+    .avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+    }
+}
