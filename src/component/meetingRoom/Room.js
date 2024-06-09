@@ -32,13 +32,20 @@ export default function Room() {
 
     useEffect(() => {
       if(!id || !currentUser) return;
+      navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(mediaStream => {
+        mediaStream.getVideoTracks()[0].enabled = false;
+        dispatch(roomActions.setMainStream(mediaStream))
+        console.log(mediaStream, "media stream")
+      }).catch((error) => {
+        console.error(error, " permission denied for media")
+      })
+
       let newParticipantRef = null;
 
       onValue(connectedRef, async (snap) => {
         if (snap.val() === true) {
           try { 
             const roomSnapshot = await get(roomRef);
-            console.log(roomSnapshot, 'snap')
             if (roomSnapshot.exists()) {
               const defaultPreferences = {
                 audio: true,
@@ -111,8 +118,8 @@ export default function Room() {
       return () => { 
         unsubscribeonChildAdded();
         unsubscribeonChildRemoved();
-      }        
-      // eslint-disable-next-line
+      }
+
     },[user, dispatch, navigate, participantsRef])
 
   if(loading){

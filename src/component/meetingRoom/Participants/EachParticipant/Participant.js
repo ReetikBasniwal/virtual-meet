@@ -4,7 +4,7 @@ import './Participant.css';
 import React from 'react';
 
 export const Participant = ({ participantData }) => {
-    console.log(participantData, "data");
+    
     return (
         <div className='participant'>
             <Card>
