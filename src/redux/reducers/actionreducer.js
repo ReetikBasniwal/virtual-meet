@@ -29,6 +29,7 @@ const actionSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
+            // console.log(action.payload, "current user");
             state.user = action.payload
         },
         addParticipant: (state, action) => {
@@ -38,9 +39,10 @@ const actionSlice = createSlice({
             if(currentUserId === participantId){
                 action.payload[participantId].currentUser = true;
             }
-            if(state.mainStream && state.roomId && !action.payload[participantId].currentUser){
-                console.log("creating")
-                addConection(state.currentUser, action.payload, state.mainStream, state.roomId);
+            const userCopy = JSON.parse(JSON.stringify(state.user));
+            if(userCopy && state.mainStream && state.roomId && !action.payload[participantId].currentUser){
+                // Make a plain copy of state.user and state.mainStream
+                addConection(userCopy, action.payload, state.mainStream, state.roomId);
             }
             action.payload[participantId].avatarColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
             state.participants = {
@@ -72,16 +74,15 @@ const addConection = (currentUser, newUser, mediaStream, roomId) => {
     mediaStream.getTracks().forEach((track) => {
         peerConection.addTrack(track, mediaStream);
     })
-
+    
     const currentUseKey = Object.keys(currentUser)[0];
     const newUseKey = Object.keys(newUser)[0];
-
+    
     const sortedIds = [currentUseKey, newUseKey].sort((a,b) => a.localeCompare(b));
-
+    
     newUser[newUseKey].peerConection = peerConection;
 
     if(sortedIds[1] === currentUseKey) {
-        console.log("creating")
         createOffer(peerConection, sortedIds[1], sortedIds[0], roomId);
     }
 }

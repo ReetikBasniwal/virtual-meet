@@ -22,20 +22,22 @@ export default function Room() {
     const roomRef = ref(db, `rooms/${id}`);
     const participantsRef = child(dbRef, `rooms/${id}/participants`);
     const connectedRef = ref(db, ".info/connected");
+    const mainStream = useSelector(state => state.roomReducer.mainStream);
 
     useEffect(() => {
         if(!currentUser){
             navigate('/sign-in');
         }
-
-    }, [currentUser, navigate])
+        dispatch(roomActions.setRoomId(id));
+        // eslint-disable-next-line
+    }, [currentUser, navigate, dispatch])
 
     useEffect(() => {
       if(!id || !currentUser) return;
       navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(mediaStream => {
         mediaStream.getVideoTracks()[0].enabled = false;
         dispatch(roomActions.setMainStream(mediaStream))
-        console.log(mediaStream, "media stream")
+        // console.log(mediaStream, "media stream")
       }).catch((error) => {
         console.error(error, " permission denied for media")
       })
@@ -99,7 +101,7 @@ export default function Room() {
     },[id, currentUser, dispatch, navigate ])
 
     useEffect(() => {
-      if(!user) return;
+      if(!user || !mainStream) return;
 
       const unsubscribeonChildAdded = onChildAdded(participantsRef, (snapshot) => {
         const participantData = snapshot.val();
@@ -120,7 +122,7 @@ export default function Room() {
         unsubscribeonChildRemoved();
       }
 
-    },[user, dispatch, navigate, participantsRef])
+    },[user, mainStream, dispatch, navigate, participantsRef])
 
   if(loading){
       return <span className='text-white'>Loading....</span>

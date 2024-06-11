@@ -3,14 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../server/AuthContext';
 import { push, ref, set } from 'firebase/database';
 import { db } from '../../server/firebase';
-import { useDispatch } from 'react-redux';
-import { roomActions } from '../../redux/reducers/actionreducer';
 // import { createBrowserHistory } from 'history';
 
 function About() {
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
 
   const handleStartMeeting = () => {
@@ -19,7 +16,7 @@ function About() {
     const newRoomRef = push(roomsRef);
     const roomId = newRoomRef.key; 
     // Set initial room data if needed
-    dispatch(roomActions.setRoomId(roomId));
+
     set(newRoomRef, {
       createdAt: new Date().toISOString(),
       // Add any additional initial data for the room
