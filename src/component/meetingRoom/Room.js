@@ -4,7 +4,7 @@ import { AuthContext } from '../../server/AuthContext';
 import { child, get, onChildAdded, onChildRemoved, onDisconnect, push, ref, onValue, update } from 'firebase/database';
 import { db } from '../../server/firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { roomActions } from '../../redux/reducers/actionreducer';
+import { initializeRoom, roomActions } from '../../redux/reducers/actionreducer';
 import MainScreen from './MainScreen/MainScreenComponent';
 // import { dbRef } from '../../server/createOrJoinRoom';
 
@@ -70,6 +70,8 @@ export default function Room() {
                   ...defaultPreferences,
                 }
               }))
+              dispatch(initializeRoom({ userId: newParticipantRef.key, roomId: id }));
+
               setLoading(false);
   
               dispatch(roomActions.setisRoomActive(true));

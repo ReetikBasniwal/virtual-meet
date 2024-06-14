@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { createOffer } from "../../server/peerConnection";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createOffer, initializeListeners } from "../../server/peerConnection";
 
 const initialState = {
     user: null,
@@ -23,6 +23,14 @@ const stunServers = {
         }
     ]
 }
+
+export const initializeRoom = createAsyncThunk(
+    'room/initializeRoom',
+    async ({ userId, roomId }, { dispatch, getState }) => {
+        initializeListeners(userId, roomId);
+        return { userId, roomId };
+    }
+);
 
 const actionSlice = createSlice({
     name: "room",
@@ -61,6 +69,11 @@ const actionSlice = createSlice({
         },
         setRoomId: (state, action) => {
             state.roomId = action.payload;
+        },
+        extraReducers: (builder) => {
+            builder.addCase(initializeRoom.fulfilled, (state, action) => {
+                // Handle any additional state updates after initialization if needed
+            });
         }
     }
 })
