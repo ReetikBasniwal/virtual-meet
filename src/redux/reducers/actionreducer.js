@@ -27,7 +27,7 @@ const stunServers = {
 export const initializeRoom = createAsyncThunk(
     'room/initializeRoom',
     async ({ userId, roomId }, { dispatch, getState }) => {
-        initializeListeners(userId, roomId);
+        initializeListeners(userId, roomId, getState);
         return { userId, roomId };
     }
 );
@@ -93,7 +93,7 @@ const addConection = (currentUser, newUser, mediaStream, roomId) => {
     
     const sortedIds = [currentUseKey, newUseKey].sort((a,b) => a.localeCompare(b));
     
-    newUser[newUseKey].peerConection = peerConection;
+    newUser[newUseKey].peerConnection = peerConection;
 
     if(sortedIds[1] === currentUseKey) {
         createOffer(peerConection, sortedIds[1], sortedIds[0], roomId);
