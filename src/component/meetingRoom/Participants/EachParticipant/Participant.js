@@ -18,13 +18,13 @@ export const Participant = ({ participantData }) => {
     const [videoEnabled, setVideoEnabled] = useState(false);
     const [audioEnabled, setAudioEnabled] = useState(false);
     // const roomRef = ref(db, `rooms/${id}`)
-    const participantRef = ref(db, `rooms/${id}/participants/${participantData.id}`);
+    const participantPreferenceRef = ref(db, `rooms/${id}/participants/${participantData.id}/preference`);
 
     useEffect(() => {
         // Listen for changes to the participant's preferences in the database
-        const unsubscribe = onValue(participantRef, (snapshot) => {
+        if(participantData.currentUser) return;
+        const unsubscribe = onValue(participantPreferenceRef, (snapshot) => {
             const data = snapshot.val();
-            console.log(data,"data")
             if (data && data.preference) {
                 setAudioEnabled(data.preference.audio);
                 setVideoEnabled(data.preference.video);
@@ -32,7 +32,7 @@ export const Participant = ({ participantData }) => {
         });
 
         return () => unsubscribe();
-    }, [participantRef]);
+    }, [participantPreferenceRef]);
 
     useEffect(() => {
         if(participantData.peerConnection) {

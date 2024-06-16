@@ -15,7 +15,7 @@ export default function MeetingFooter() {
     const userPrefernce = user?.[Object.keys(user)[0]];
     const { id } = useParams();
     const roomRef = ref(db, `rooms/${id}`);
-    const participantRef = ref(db, `rooms/${id}participants/${Object.keys(user)[0]}`);
+    const preferenceRef = child(roomRef, `/participants/${Object.keys(user)[0]}/preference`);
 
     const dispatch = useDispatch();
 
@@ -41,19 +41,18 @@ export default function MeetingFooter() {
             }
         }))
 
-        get(child(roomRef, `participants/${Object.keys(user)[0]}`)).then((snapshot) => {
+        get(preferenceRef).then((snapshot) => {
             if (snapshot.exists()) {
-              console.log(snapshot.val());
               let newPreference = {
                 ...snapshot.val(),
                 [prop]: value
               }
-              update(participantRef, newPreference);
+              update(preferenceRef, newPreference);
             } else {
-              console.log("No data available");
+              console.log("No preference available");
             }
         }).catch((error) => {
-        console.error(error);
+            console.error(error);
         });
 
     }
