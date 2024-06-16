@@ -19,7 +19,7 @@ export const ParticipantComponent = () => {
             className='participantContainer'>
             {participantsKeys.map((participantKey) => {
                 const currentParticipant = participants[participantKey];
-                return <Participant participantData={currentParticipant} key={participantKey} />
+                return <Participant participantData={{...currentParticipant, id: participantKey}} key={participantKey} />
             })}
         </div>
     )

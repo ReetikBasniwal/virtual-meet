@@ -16,8 +16,6 @@ export default function Room() {
     const { currentUser } = useContext(AuthContext);
     const dispatch = useDispatch();
 
-    const user = useSelector(state => state.roomReducer.user);
-
     const dbRef = ref(db);
     const roomRef = ref(db, `rooms/${id}`);
     const participantsRef = child(dbRef, `rooms/${id}/participants`);
@@ -35,7 +33,7 @@ export default function Room() {
     useEffect(() => {
       if(!id || !currentUser) return;
       navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(mediaStream => {
-        mediaStream.getVideoTracks()[0].enabled = false;
+        // mediaStream.getVideoTracks()[0].enabled = false;
         dispatch(roomActions.setMainStream(mediaStream))
         // console.log(mediaStream, "media stream")
       }).catch((error) => {
@@ -51,7 +49,7 @@ export default function Room() {
             if (roomSnapshot.exists()) {
               const defaultPreferences = {
                 audio: true,
-                video: false,
+                video: true,
                 screen: false,
               };
         
@@ -103,7 +101,7 @@ export default function Room() {
     },[id, currentUser, dispatch, navigate ])
 
     useEffect(() => {
-      if(!user || !mainStream) return;
+      if(!mainStream) return;
 
       const unsubscribeonChildAdded = onChildAdded(participantsRef, (snapshot) => {
         const participantData = snapshot.val();
@@ -124,7 +122,7 @@ export default function Room() {
         unsubscribeonChildRemoved();
       }
 
-    },[user, mainStream, dispatch, navigate, participantsRef])
+    },[mainStream, dispatch, navigate, participantsRef])
 
   if(loading){
       return <span className='text-white'>Loading....</span>

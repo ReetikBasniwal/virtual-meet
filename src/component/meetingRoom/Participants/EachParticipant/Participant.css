@@ -40,6 +40,21 @@
     background: rgb(88, 86, 86);
 }
 
+.red-muted {
+    color: white;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.1rem;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(243, 76, 76);
+}
+
 .name {
     position: absolute;
     color: white;
