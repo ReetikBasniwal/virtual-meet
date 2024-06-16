@@ -49,7 +49,6 @@ const actionSlice = createSlice({
             }
             const userCopy = JSON.parse(JSON.stringify(state.user));
             if(userCopy && state.mainStream && state.roomId && !action.payload[participantId].currentUser){
-                // Make a plain copy of state.user and state.mainStream
                 addConection(userCopy, action.payload, state.mainStream, state.roomId);
             }
             action.payload[participantId].avatarColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;

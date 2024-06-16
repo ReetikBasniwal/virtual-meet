@@ -4,24 +4,48 @@ import './Participant.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IoMdMic } from 'react-icons/io';
+import { db } from '../../../../server/firebase';
+import { onValue, ref } from 'firebase/database';
+import { useParams } from 'react-router-dom';
 
 export const Participant = ({ participantData }) => {
     const videoRef = useRef();
     const remoteStream = new MediaStream();
     const userStream = useSelector(state => state.roomReducer.mainStream);
     const user = useSelector(state => state.roomReducer.user);
-
+    
+    const { id } = useParams();
     const [videoEnabled, setVideoEnabled] = useState(false);
     const [audioEnabled, setAudioEnabled] = useState(false);
+    // const roomRef = ref(db, `rooms/${id}`)
+    const participantRef = ref(db, `rooms/${id}/participants/${participantData.id}`);
+
+    useEffect(() => {
+        // Listen for changes to the participant's preferences in the database
+        const unsubscribe = onValue(participantRef, (snapshot) => {
+            const data = snapshot.val();
+            console.log(data,"data")
+            if (data && data.preference) {
+                setAudioEnabled(data.preference.audio);
+                setVideoEnabled(data.preference.video);
+            }
+        });
+
+        return () => unsubscribe();
+    }, [participantRef]);
 
     useEffect(() => {
         if(participantData.peerConnection) {
             participantData.peerConnection.ontrack = (event) => {
                 event.streams[0].getTracks().forEach(track => {
                     remoteStream.addTrack(track);
+                    if (track.kind === 'video') {
+                        setVideoEnabled(track.enabled);
+                    } else if (track.kind === 'audio') {
+                        setAudioEnabled(track.enabled);
+                    }
                 })
-
-                videoRef.current.srcObject = remoteStream.current;
+                videoRef.current.srcObject = remoteStream;
             }
         }
         // eslint-disable-next-line

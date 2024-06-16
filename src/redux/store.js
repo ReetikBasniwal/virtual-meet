@@ -9,11 +9,11 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ['setMainStream'],
+        ignoredActions: ['setMainStream', 'addParticipant'],
         // Ignore these field paths in all actions
         ignoredActionPaths: ['meta.arg', 'payload', 'payload.timestamp'],
         // Ignore these paths in the state
-        ignoredPaths: ['room.mainStream'],
+        ignoredPaths: ['room.mainStream', 'room.participants'],
       },
     }),
 });
