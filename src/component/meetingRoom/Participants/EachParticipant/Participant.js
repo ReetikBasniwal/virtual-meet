@@ -54,8 +54,10 @@ export const Participant = ({ participantData }) => {
     useEffect(() => {
         if(userStream && participantData.currentUser) {
             const preferences = user?.[Object.keys(user)[0]];
+            let isNoVideo = true;
             userStream.getTracks().forEach(track => {
                 if (track.kind === 'video') {
+                    isNoVideo = false;
                     track.enabled = preferences.video;
                     if (!preferences.video) {
                         track.stop(); // Stop the video track to turn off the camera
@@ -67,8 +69,7 @@ export const Participant = ({ participantData }) => {
                     setAudioEnabled(preferences.audio);
                 }
             });
-            // setVideoEnabled(preferences.video);
-            // setAudioEnabled(preferences.audio);
+            if(isNoVideo) setVideoEnabled(false);
             videoRef.current.srcObject = userStream;
         }
     },[participantData.currentUser, userStream, user])
