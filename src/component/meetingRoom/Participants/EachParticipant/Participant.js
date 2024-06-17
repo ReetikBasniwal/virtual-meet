@@ -57,6 +57,10 @@ export const Participant = ({ participantData }) => {
             userStream.getTracks().forEach(track => {
                 if (track.kind === 'video') {
                     track.enabled = preferences.video;
+                    if (!preferences.video) {
+                        track.stop(); // Stop the video track to turn off the camera
+                        userStream.removeTrack(track);
+                    }
                     setVideoEnabled(preferences.video);
                 } else if (track.kind === 'audio') {
                     track.enabled = preferences.audio;
