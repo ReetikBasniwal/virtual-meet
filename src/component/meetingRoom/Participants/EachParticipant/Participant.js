@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 
 export const Participant = ({ participantData }) => {
     const videoRef = useRef();
-    const remoteStream = new MediaStream();
+    const remoteStream =  React.useMemo(() => new MediaStream(), []);
     const userStream = useSelector(state => state.roomReducer.mainStream);
     const user = useSelector(state => state.roomReducer.user);
     
@@ -25,14 +25,15 @@ export const Participant = ({ participantData }) => {
         if(participantData.currentUser) return;
         const unsubscribe = onValue(participantPreferenceRef, (snapshot) => {
             const data = snapshot.val();
-            if (data && data.preference) {
-                setAudioEnabled(data.preference.audio);
-                setVideoEnabled(data.preference.video);
+            console.log(data, "dtat")
+            if (data) {
+                setAudioEnabled(data.audio);
+                setVideoEnabled(data.video);
             }
         });
 
         return () => unsubscribe();
-    }, [participantPreferenceRef]);
+    }, [participantData.currentUser, participantPreferenceRef]);
 
     useEffect(() => {
         if(participantData.peerConnection) {
@@ -48,8 +49,8 @@ export const Participant = ({ participantData }) => {
                 videoRef.current.srcObject = remoteStream;
             }
         }
-        // eslint-disable-next-line
-    },[participantData.peerConnection])
+
+    },[participantData.peerConnection, remoteStream])
 
     useEffect(() => {
         if(userStream && participantData.currentUser) {
