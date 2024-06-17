@@ -82,9 +82,9 @@ export const roomReducer = actionSlice.reducer;
 export const roomActions = actionSlice.actions;
 
 const addConection = (currentUser, newUser, mediaStream, roomId) => {
-    const peerConection = new RTCPeerConnection(stunServers);
+    const peerConnection = new RTCPeerConnection(stunServers);
     mediaStream.getTracks().forEach((track) => {
-        peerConection.addTrack(track, mediaStream);
+        peerConnection.addTrack(track, mediaStream);
     })
     
     const currentUseKey = Object.keys(currentUser)[0];
@@ -92,9 +92,9 @@ const addConection = (currentUser, newUser, mediaStream, roomId) => {
     
     const sortedIds = [currentUseKey, newUseKey].sort((a,b) => a.localeCompare(b));
     
-    newUser[newUseKey].peerConnection = peerConection;
+    newUser[newUseKey].peerConnection = peerConnection;
 
     if(sortedIds[1] === currentUseKey) {
-        createOffer(peerConection, sortedIds[1], sortedIds[0], roomId);
+        createOffer(peerConnection, sortedIds[1], sortedIds[0], roomId);
     }
 }

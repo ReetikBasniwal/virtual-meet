@@ -25,7 +25,6 @@ export const Participant = ({ participantData }) => {
         if(participantData.currentUser) return;
         const unsubscribe = onValue(participantPreferenceRef, (snapshot) => {
             const data = snapshot.val();
-            console.log(data, "dtat")
             if (data) {
                 setAudioEnabled(data.audio);
                 setVideoEnabled(data.video);
