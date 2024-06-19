@@ -21,30 +21,12 @@ export default function MeetingFooter() {
 
     const togglePreference = (prop, value) => {
         if (mainStream) {
-            let updatedStream = new MediaStream(mainStream.getTracks());
-
             if (prop === 'video') {
-                if (value) {
-                    navigator.mediaDevices.getUserMedia({ video: true }).then(newStream => {
-                        const newVideoTrack = newStream.getVideoTracks()[0];
-                        updatedStream.addTrack(newVideoTrack);
-                        dispatch(roomActions.setMainStream(updatedStream));
-                    }).catch(error => {
-                        console.error("Error enabling video: ", error);
-                    });
-                } else {
-                    updatedStream.getVideoTracks().forEach(track => {
-                        track.stop();
-                        updatedStream.removeTrack(track);
-                    });
-
-                    dispatch(roomActions.setMainStream(updatedStream));
-                }
+                mainStream.getVideoTracks()[0].enabled = value
             } else if (prop === 'audio') {
-                updatedStream.getAudioTracks().forEach(track => {
-                    track.enabled = value;
-                });
+                mainStream.getAudioTracks()[0].enabled = value
             }
+            dispatch(roomActions.setMainStream(mainStream));
         }
 
         dispatch(roomActions.setUser({

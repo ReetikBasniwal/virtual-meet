@@ -22,7 +22,6 @@ export const Participant = ({ participantData }) => {
 
     useEffect(() => {
         // Listen for changes to the participant's preferences in the database
-        if(participantData.currentUser) return;
         const unsubscribe = onValue(participantPreferenceRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -32,7 +31,7 @@ export const Participant = ({ participantData }) => {
         });
 
         return () => unsubscribe();
-    }, [participantData.currentUser, participantPreferenceRef]);
+    }, [participantPreferenceRef]);
 
     useEffect(() => {
         if(participantData.peerConnection) {
@@ -49,27 +48,20 @@ export const Participant = ({ participantData }) => {
             }
         }
 
-    },[participantData.peerConnection, remoteStream])
+    },[participantData.peerConnection, remoteStream, participantPreferenceRef])
 
     useEffect(() => {
         if(userStream && participantData.currentUser) {
             const preferences = user?.[Object.keys(user)[0]];
-            let isNoVideo = true;
             userStream.getTracks().forEach(track => {
                 if (track.kind === 'video') {
-                    isNoVideo = false;
                     track.enabled = preferences.video;
-                    if (!preferences.video) {
-                        track.stop(); // Stop the video track to turn off the camera
-                        userStream.removeTrack(track);
-                    }
                     setVideoEnabled(preferences.video);
                 } else if (track.kind === 'audio') {
                     track.enabled = preferences.audio;
                     setAudioEnabled(preferences.audio);
                 }
             });
-            if(isNoVideo) setVideoEnabled(false);
             videoRef.current.srcObject = userStream;
         }
     },[participantData.currentUser, userStream, user])
