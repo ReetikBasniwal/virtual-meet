@@ -37,32 +37,22 @@ export const Participant = ({ participantData }) => {
         if(participantData.peerConnection) {
             participantData.peerConnection.ontrack = (event) => {
                 event.streams[0].getTracks().forEach(track => {
-                    remoteStream.addTrack(track);
-                    if (track.kind === 'video') {
-                        setVideoEnabled(track.enabled);
-                    } else if (track.kind === 'audio') {
-                        setAudioEnabled(track.enabled);
+                    if (!remoteStream.getTracks().includes(track)) {
+                        remoteStream.addTrack(track);
                     }
                 })
-                videoRef.current.srcObject = remoteStream;
+                if (videoRef.current.srcObject !== remoteStream) {
+                    videoRef.current.srcObject = remoteStream;
+                }
             }
         }
 
-    },[participantData.peerConnection, remoteStream, participantPreferenceRef])
+    },[participantData.peerConnection, remoteStream])
 
     useEffect(() => {
         if(userStream && participantData.currentUser) {
-            const preferences = user?.[Object.keys(user)[0]];
-            userStream.getTracks().forEach(track => {
-                if (track.kind === 'video') {
-                    track.enabled = preferences.video;
-                    setVideoEnabled(preferences.video);
-                } else if (track.kind === 'audio') {
-                    track.enabled = preferences.audio;
-                    setAudioEnabled(preferences.audio);
-                }
-            });
             videoRef.current.srcObject = userStream;
+            videoRef.current.muted = "muted"
         }
     },[participantData.currentUser, userStream, user])
     
