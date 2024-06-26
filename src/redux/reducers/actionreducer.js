@@ -60,6 +60,9 @@ const actionSlice = createSlice({
         removeParticipant: (state, action) => {
             delete state.participants[action.payload.participantKey];
         },
+        resetParticipant: (state, action) => {
+            state.participants = action.payload;
+        },
         setisRoomActive: (state, action) => {
             state.isActiveRoom = action.payload;
         },
@@ -95,6 +98,6 @@ const addConection = (currentUser, newUser, mediaStream, roomId) => {
     newUser[newUseKey].peerConnection = peerConnection;
 
     if(sortedIds[1] === currentUseKey) {
-        createOffer(peerConnection, sortedIds[1], sortedIds[0], roomId);
+        createOffer(peerConnection, sortedIds[1], sortedIds[0], roomId, currentUser[currentUseKey].userName);
     }
 }

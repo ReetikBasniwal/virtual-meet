@@ -5,7 +5,7 @@ import { child, get, onChildAdded, onChildRemoved, onDisconnect, push, ref, onVa
 import { db } from '../../server/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { initializeRoom, roomActions } from '../../redux/reducers/actionreducer';
-import MainScreen from './MainScreen/MainScreenComponent';
+import MainScreen from './MainScreen/MainScreen';
 // import { dbRef } from '../../server/createOrJoinRoom';
 
 export default function Room() {
@@ -32,7 +32,7 @@ export default function Room() {
 
     useEffect(() => {
       if(!id || !currentUser) return;
-      navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(mediaStream => {
+      navigator.mediaDevices.getUserMedia({ audio: true, video: {facingMode: 'user'} }).then(mediaStream => {
         // mediaStream.getVideoTracks()[0].enabled = false;
         dispatch(roomActions.setMainStream(mediaStream))
         // console.log(mediaStream, "media stream")

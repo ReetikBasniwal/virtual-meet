@@ -1,6 +1,6 @@
 import { ParticipantComponent } from '../Participants/ParticipantsContainer';
 import './MainScreen.css'
-import MeetingFooter from "./MeetingFooter/MeetingFooterComponent";
+import MeetingFooter from "./MeetingFooter/MeetingFooter";
 
 export default function MainScreen(){
 

@@ -1,12 +1,13 @@
 import { IoMdMic } from 'react-icons/io'
 import './MeetingFooter.css'
 import { BsCameraVideoFill, BsCameraVideoOffFill, BsFillMicMuteFill } from 'react-icons/bs'
-import { TbScreenShare } from 'react-icons/tb'
+import { TbScreenShare, TbScreenShareOff } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux';
 import { roomActions } from '../../../../redux/reducers/actionreducer';
-import { child, get, ref, update } from 'firebase/database';
+import { child, get, ref, remove, update } from 'firebase/database';
 import { db } from '../../../../server/firebase';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { MdCallEnd } from 'react-icons/md';
 
 export default function MeetingFooter() {
     // const participants = useSelector(state => state.roomReducer.participants);
@@ -18,13 +19,34 @@ export default function MeetingFooter() {
     const preferenceRef = child(roomRef, `/participants/${Object.keys(user)[0]}/preference`);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const togglePreference = (prop, value) => {
+    const togglePreference = async (prop, value) => {
         if (mainStream) {
             if (prop === 'video') {
                 mainStream.getVideoTracks()[0].enabled = value
             } else if (prop === 'audio') {
                 mainStream.getAudioTracks()[0].enabled = value
+            }else {
+                if(value){
+                    navigator.mediaDevices.getDisplayMedia({ cursor: true }).then(stream => {
+                        const screenTrack = stream.getTracks()[0];
+                        const oldVideoTrack = mainStream.getVideoTracks()[0];
+                        mainStream.removeTrack(oldVideoTrack);
+                        mainStream.addTrack(screenTrack);
+                    })
+                }else {
+                    mainStream.getTracks().forEach(track => {
+                        if(track.kind === 'screnn') {
+                            track.stop();
+                            mainStream.removeTrack(track);
+                        }
+                    });
+                    const newStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+                    newStream.getTracks().forEach(track => {
+                        mainStream.addTrack(track);
+                    });
+                }
             }
             dispatch(roomActions.setMainStream(mainStream));
         }
@@ -52,6 +74,20 @@ export default function MeetingFooter() {
 
     }
 
+    const hangupCall = () => {
+        if (Object.keys(user)[0]) {
+            const participantRef = child(roomRef, `/participants/${Object.keys(user)[0]}`);
+            remove(participantRef).then(() => {
+              console.log("Participant removed on end call");
+              navigate('/');
+            }).catch(error => {
+              console.error("Error removing participant on end call: ", error);
+            });
+        }
+        dispatch(roomActions.resetParticipant({}));
+        navigate('/');
+    }
+
     return (
         <div className="h-full w-full flex items-center justify-center">
             <div className={`${userPrefernce.audio ? 'meetingIcons' : 'redMeetingIcons'}`} onClick={() => togglePreference("audio", !userPrefernce.audio)}>
@@ -60,8 +96,11 @@ export default function MeetingFooter() {
             <div className={`${userPrefernce.video ? 'meetingIcons' : 'redMeetingIcons'}`} onClick={() => togglePreference("video", !userPrefernce.video)}>
                 {userPrefernce.video ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
             </div>
-            <div className={'meetingIcons'}>
-                {userPrefernce.video ? <TbScreenShare /> : ""}
+            <div className={`${userPrefernce.screen ? 'meetingIcons' : 'redMeetingIcons'}`} onClick={() => togglePreference("screen", !userPrefernce.screen)}>
+                {userPrefernce.screen ? <TbScreenShare /> : <TbScreenShareOff />}
+            </div>
+            <div className='redMeetingIcons' onClick={hangupCall}>
+                <MdCallEnd />   
             </div>
         </div>
     )

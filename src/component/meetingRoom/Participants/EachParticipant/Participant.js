@@ -40,12 +40,19 @@ export const Participant = ({ participantData }) => {
                     if (!remoteStream.getTracks().includes(track)) {
                         remoteStream.addTrack(track);
                     }
-                })
+                });
                 if (videoRef.current.srcObject !== remoteStream) {
                     videoRef.current.srcObject = remoteStream;
                 }
-            }
+            };
         }
+
+        // Clean up previous peerConnection's ontrack handler
+        return () => {
+            if (participantData.peerConnection) {
+                participantData.peerConnection.ontrack = null;
+            }
+        };
 
     },[participantData.peerConnection, remoteStream])
 
