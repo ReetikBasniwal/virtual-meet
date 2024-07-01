@@ -38,7 +38,7 @@ export default function MeetingFooter() {
                 mainStream.getAudioTracks()[0].enabled = value
             }else {
                 value && toggleVideoTrack({video: false, audio: true});
-                reInitializeStream(false, true, value ? 'userMedia' : 'displayStream');
+                reInitializeStream(value ? false: true, true, value ? 'displayStream' : 'userMedia');
             }
             dispatch(roomActions.setMainStream(mainStream));
         }
@@ -125,7 +125,7 @@ export default function MeetingFooter() {
         navigate('/');
         dispatch(roomActions.setisRoomActive(true));
     }
-
+console.log(userPrefernce, "userPrefernce")
     return (
         <div className="h-full w-full flex items-center justify-center">
             <div className={`${userPrefernce.audio ? 'meetingIcons' : 'redMeetingIcons'}`} onClick={() => togglePreference("audio", !userPrefernce.audio)}>
