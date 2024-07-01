@@ -125,7 +125,7 @@ export default function MeetingFooter() {
         navigate('/');
         dispatch(roomActions.setisRoomActive(true));
     }
-console.log(userPrefernce, "userPrefernce")
+    
     return (
         <div className="h-full w-full flex items-center justify-center">
             <div className={`${userPrefernce.audio ? 'meetingIcons' : 'redMeetingIcons'}`} onClick={() => togglePreference("audio", !userPrefernce.audio)}>
