@@ -17,7 +17,6 @@ export const Participant = ({ participantData }) => {
     const { id } = useParams();
     const [videoEnabled, setVideoEnabled] = useState(false);
     const [audioEnabled, setAudioEnabled] = useState(false);
-    // const roomRef = ref(db, `rooms/${id}`)
     const participantPreferenceRef = ref(db, `rooms/${id}/participants/${participantData.id}/preference`);
 
     useEffect(() => {
@@ -37,9 +36,15 @@ export const Participant = ({ participantData }) => {
         if(participantData.peerConnection) {
             participantData.peerConnection.ontrack = (event) => {
                 event.streams[0].getTracks().forEach(track => {
-                    if (!remoteStream.getTracks().includes(track)) {
-                        remoteStream.addTrack(track);
-                    }
+                    remoteStream.addTrack(track);
+                
+                    // Listen for the 'ended' event on each track
+                    track.onended = () => {
+                        remoteStream.removeTrack(track);
+                        if (track.kind === 'video') {
+                            setVideoEnabled(false);
+                        }
+                    };
                 });
                 if (videoRef.current.srcObject !== remoteStream) {
                     videoRef.current.srcObject = remoteStream;
@@ -52,24 +57,47 @@ export const Participant = ({ participantData }) => {
             if (participantData.peerConnection) {
                 participantData.peerConnection.ontrack = null;
             }
+            remoteStream.getTracks().forEach(track => {
+                track.onended = null;
+                remoteStream.removeTrack(track);
+            });
         };
 
     },[participantData.peerConnection, remoteStream])
 
     useEffect(() => {
+        if (!videoEnabled && videoRef.current && videoRef.current.srcObject) {
+            const videoTracks = videoRef.current.srcObject.getVideoTracks();
+            videoTracks.forEach(track => {
+                track.enabled = false;
+            });
+        } else if (videoEnabled && videoRef.current && videoRef.current.srcObject) {
+            const videoTracks = videoRef.current.srcObject.getVideoTracks();
+            videoTracks.forEach(track => {
+                track.enabled = true;
+            });
+        }
+    }, [videoEnabled]);
+
+    useEffect(() => {
         if(userStream && participantData.currentUser) {
             videoRef.current.srcObject = userStream;
-            videoRef.current.muted = "muted"
+            videoRef.current.muted = true;
         }
     },[participantData.currentUser, userStream, user])
     
     return (
         <div className='participant'>
             <Card>
-                <div className={`${audioEnabled ? 'muted' : 'red-muted'}`}>
+                <div className={`${audioEnabled ? 'muted bg-transparent' : 'red-muted'} mic-icon`}>
                     {audioEnabled ? <IoMdMic /> : <BsFillMicMuteFill />}
                 </div>
-                <video ref={videoRef} className="video" autoPlay playsInline></video>
+                <video 
+                    ref={videoRef} 
+                    className={`video ${participantData.currentUser ? 'video-mirrored' : ''}`} 
+                    autoPlay playsInline
+                    style={{ display: videoEnabled ? 'block' : 'none' }}
+                ></video>
                 {!videoEnabled && <div style={{backgroundColor: participantData.avatarColor }} 
                             className="avatar">{participantData.userName[0]}</div>
                 }

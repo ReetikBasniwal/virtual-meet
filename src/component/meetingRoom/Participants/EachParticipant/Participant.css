@@ -13,6 +13,10 @@
     border-radius: 8px;
 }
 
+.video-mirrored {
+    transform: scaleX(-1);
+}
+
 .avatar {
     width: 200px;
     height: 200px;
@@ -25,8 +29,7 @@
     position: absolute;
     font-size: 9rem;
 }
-
-.muted {
+.mic-icon {
     color: white;
     position: absolute;
     right: 1rem;
@@ -38,21 +41,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 1;
+}
+
+.muted {
     background: rgb(88, 86, 86);
+    opacity: 0.4;
 }
 
 .red-muted {
-    color: white;
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    font-size: 1.1rem;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background: rgb(243, 76, 76);
 }
 

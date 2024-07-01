@@ -3,7 +3,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useEffect, useState } from "react";
 import { auth, db } from "./firebase";
 import { child, get, ref } from "firebase/database";
-// import { startMeeting } from "./createOrJoinRoom";
 
 export const AuthContext = createContext();
 
