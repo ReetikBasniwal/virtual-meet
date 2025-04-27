@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../server/AuthContext';
 import SignOut from '../signOut/SignOut';
 import { useSelector } from 'react-redux';
+import { IoSunnyOutline } from "react-icons/io5";
+import { LuMoon } from "react-icons/lu";
 
 
-function Navbar() {
+function Navbar({ isDarkMode, toggleDarkMode }) {
 
   const [currentTime, setCurrentTime] = React.useState("");
   const { currentUser } = useContext(AuthContext);
@@ -40,9 +42,20 @@ function Navbar() {
     <>
       {isActiveRoom ? <></> : (
         <>
-        <nav className="flex items-center justify-between mt-2 mr-2 ml-2" style={{background: '#282c34'}}>
-          <div className='text-4xl text-blue-400'>V Meet</div>
-          <div className='flex items-center'>
+        <nav className="flex items-center justify-between p-2 bg-white/80 dark:bg-gray-900/80">
+          <div className='text-4xl text-blue-900 dark:text-blue-400'>V Meet</div>
+          <div className='flex items-center gap-4'>
+            <button
+              onClick={toggleDarkMode}
+              className=" cursor-pointer p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {isDarkMode ? (
+                <IoSunnyOutline className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              ) : (
+                <LuMoon className="w-5 h-5 text-gray-500" />
+              )}
+            </button>
             <div className='text-xl text-blue-400 mr-4'>{currentTime}</div>
 
             {/* USER LOGO */}

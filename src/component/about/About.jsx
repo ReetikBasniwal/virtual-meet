@@ -33,10 +33,10 @@ function About() {
     <>
       <div className='flex mx-10 items-center justify-center h-full w-full overflow-hidden'>
         <div className='flex items-center flex-col'>
-          {currentUser && <span className='text-blue-400 italic text-4xl'>Hi {currentUser.firstName} !</span>}
-          <span className='text-center text-blue-400 italic text-3xl'>Empower face-to-face connections from anywhere with V Meet!</span>
-          {!currentUser && <Link className='rounded pt-1 pb-1 pr-2 pl-2 mt-6 text-2xl font-medium bg-blue-300 w-fit text-slate-600' to='/sign-up'>Sign Up</Link>}
-          {currentUser && <button className='rounded pt-1 pb-1 pr-2 pl-2 mt-6 text-2xl font-medium bg-slate-300 w-fit text-slate-600' onClick={handleStartMeeting}>Start a meet</button>}
+          {currentUser && <span className='text-gray-600 dark:text-gray-300 italic text-4xl'>Hi {currentUser.firstName} !</span>}
+          <span className='mt-4 text-center text-gray-600 dark:text-gray-300 italic text-3xl'>Empower face-to-face connections from anywhere with V Meet!</span>
+          {!currentUser && <Link className='rounded pt-1 pb-1 pr-2 pl-2 mt-6 text-2xl font-medium bg-blue-300 w-fit text-slate-600' to='/sign-up'>Sign up</Link>}
+          {currentUser && <button className='cursor-pointer mt-4 font-medium justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 bg-sky-800 text-white hover:bg-sky-700 focus:ring-primary-300 text-base px-5 py-2.5 gap-2.5 flex-1' onClick={handleStartMeeting}>Start a meeting</button>}
         </div>
       </div>
     </>
