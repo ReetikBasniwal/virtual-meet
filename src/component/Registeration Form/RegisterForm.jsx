@@ -93,7 +93,7 @@ function RegisterForm() {
 
     return (
         <>
-            <div className="absolute bg-sky-900/50 flex top-0 items-center justify-center h-full w-full">
+            <div className="absolute bg-sky-900/50 flex top-0 items-center justify-center h-full w-full" onClick={() => { navigate('/'); }}>
                 <div className='visible flex flex-col p-2 bg-sky-200 rounded-lg' style={{ width: '30em', height: '45em' }}>
                     <div className='p-4 flex flex-col items-center justify-center'>
                         <span className='text-xl font-semibold'>Create a new account</span>
@@ -146,10 +146,10 @@ function RegisterForm() {
                             required
                             autoComplete='off'
                         />
-                        <button className='border rounded-lg mt-6 pl-4 pr-4 pb-2 pt-2 bg-cyan-700 text-white text-2xl w-fit' onClick={(e) => { e.preventDefault(); handleSubmit() }}>Sign Up</button>
+                        <button className='border rounded-lg mt-6 pl-4 pr-4 pb-2 pt-2 bg-cyan-700 text-white text-2xl w-fit' onClick={(e) => { e.preventDefault(); handleSubmit() }}>Sign up</button>
                     </form>
                     <hr className='border-slate-400' />
-                    <div className='flex items-center justify-center border h-full w-full'>
+                    <div className='flex items-center justify-center h-full w-full'>
                         <span className=''>Already have an account? <Link className="border-b border-sky-500 text-sky-500" to="/sign-in">Sing in</Link></span>
                     </div>
                 </div>
