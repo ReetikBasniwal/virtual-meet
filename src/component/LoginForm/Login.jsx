@@ -51,7 +51,7 @@ function Login() {
 
   return (
     <>
-      <div className="absolute flex flex-col bg-sky-900/75 flex top-0 items-center justify-center h-full w-full">
+      <div className="absolute flex flex-col bg-sky-900/75 flex top-0 items-center justify-center h-full w-full" onClick={() => { navigate('/'); }}>
           <div className='visible flex flex-col mb-4 p-4 bg-sky-200 rounded-lg' style={{width: '30em', height: '25em'}}>
               <form className="flex p-8 flex-col items-center justify-center" onSubmit={(e) => e.preventDefault()}>
                   <label className='text-md p-2 font-medium' htmlFor="email">Email</label>
@@ -73,7 +73,7 @@ function Login() {
                   <button className='border rounded-lg mt-6 pl-4 pr-4 pb-2 pt-1 bg-cyan-700 text-white text-2xl w-fit' onClick={handleSignIn}>Sign in</button>
               </form>
               <hr className='border-slate-400' />
-              <div className='flex items-center justify-center border h-full w-full'>
+              <div className='flex items-center justify-center h-full w-full'>
                   <span className=''>Don't have an account? <Link className="border-b border-sky-500 text-sky-500" to="/sign-up">Sign up</Link></span>
               </div>
           </div>

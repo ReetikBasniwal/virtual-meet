@@ -31,7 +31,7 @@ function About() {
 
   return (
     <>
-      <div className='flex mx-10 items-center justify-center h-full w-full overflow-hidden'>
+      <div className='flex items-center justify-center h-full w-full overflow-hidden'>
         <div className='flex items-center flex-col'>
           {currentUser && <span className='text-gray-600 dark:text-gray-300 italic text-4xl'>Hi {currentUser.firstName} !</span>}
           <span className='mt-4 text-center text-gray-600 dark:text-gray-300 italic text-3xl'>Empower face-to-face connections from anywhere with V Meet!</span>
