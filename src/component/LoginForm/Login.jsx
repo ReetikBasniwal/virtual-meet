@@ -52,7 +52,7 @@ function Login() {
   return (
     <>
       <div className="absolute flex flex-col bg-sky-900/75 flex top-0 items-center justify-center h-full w-full" onClick={() => { navigate('/'); }}>
-          <div className='visible flex flex-col mb-4 p-4 bg-sky-200 rounded-lg' style={{width: '30em', height: '25em'}}>
+          <div className='visible flex flex-col mb-4 p-4 bg-sky-200 rounded-lg' onClick={(e) => e.stopPropagation()} style={{width: '30em', height: '25em'}}>
               <form className="flex p-8 flex-col items-center justify-center" onSubmit={(e) => e.preventDefault()}>
                   <label className='text-md p-2 font-medium' htmlFor="email">Email</label>
                   <input 
