@@ -21,7 +21,7 @@ export default function Room() {
     const participantsRef = child(dbRef, `rooms/${id}/participants`);
     const connectedRef = ref(db, ".info/connected");
     const mainStream = useSelector(state => state.roomReducer.mainStream);
-
+console.log(id, "id");
     useEffect(() => {
         if(!currentUser){
             navigate('/sign-in');
