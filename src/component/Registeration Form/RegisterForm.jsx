@@ -94,7 +94,7 @@ function RegisterForm() {
     return (
         <>
             <div className="absolute bg-sky-900/50 flex top-0 items-center justify-center h-full w-full" onClick={() => { navigate('/'); }}>
-                <div className='visible flex flex-col p-2 bg-sky-200 rounded-lg' style={{ width: '30em', height: '45em' }}>
+                <div className='visible flex flex-col p-2 bg-sky-200 rounded-lg' onClick={(e) => e.stopPropagation()} style={{ width: '30em', height: '45em' }}>
                     <div className='p-4 flex flex-col items-center justify-center'>
                         <span className='text-xl font-semibold'>Create a new account</span>
                         <span>Please enter the following details</span>
