@@ -18,7 +18,7 @@ function About() {
   const handleStartMeeting = () => {
     // Push a new room under 'rooms' to generate a unique room ID
     const roomId = generateReadableRoomId();
-    const newRoomRef = ref(db, 'rooms/$roomId');
+    const newRoomRef = ref(db,  `rooms/${roomId}`);
     // Set initial room data if needed
 
     set(newRoomRef, {
