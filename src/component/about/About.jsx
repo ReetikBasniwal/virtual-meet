@@ -9,12 +9,15 @@ function About() {
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const generateReadableRoomId = () => {
+    const getRandomSegment = () => Math.floor(100 + Math.random() * 900); // 3-digit number
+    return `${getRandomSegment()}-${getRandomSegment()}-${getRandomSegment()}`;
+  };
 
   const handleStartMeeting = () => {
-    const roomsRef = ref(db, 'rooms'); // Reference to the 'rooms' node in the database
     // Push a new room under 'rooms' to generate a unique room ID
-    const newRoomRef = push(roomsRef);
-    const roomId = newRoomRef.key; 
+    const roomId = generateReadableRoomId();
+    const newRoomRef = ref(db, 'rooms/$roomId');
     // Set initial room data if needed
 
     set(newRoomRef, {
