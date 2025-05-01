@@ -95,7 +95,7 @@ function RegisterForm() {
 
     return (
         <>
-            <div className="absolute inset-0 bg-black/50 flex top-0 items-center justify-center h-full w-full" onClick={() => { navigate('/'); }}>
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                 <div className='visible flex flex-col p-2 bg-white dark:bg-gray-800 rounded-lg' onClick={(e) => e.stopPropagation()} style={{ width: '30em', height: '38em' }}>
                     <div className='p-2 flex items-start justify-between'>
                         <div className="flex flex-col justify-center">
