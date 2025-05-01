@@ -1,8 +1,9 @@
 import { ref, set } from "firebase/database";
 import { db } from "./firebase";
 
-export function writeUserData(userId, firstName, lastName, email) {
-  set(ref(db, 'users/' + userId), {
+export const writeUserData = async (userId, firstName, lastName, email) => {
+  const userRef = ref(db, 'users/' + userId);
+  await set(userRef, {
       firstName,
       lastName,
       email,

@@ -9,7 +9,9 @@ import Room from './component/meetingRoom/Room';
 import FourOFour from './pages/FourOFour';
 import WentWrong from './pages/WentWrong';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from './server/AuthContext';
+import { PrivatePage } from './component/PrivatePage';
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
     }
     return false;
   });
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -44,7 +47,14 @@ function App() {
             <Route exact path='/sign-up' element={<RegisterForm />} />
             <Route exact path='/sign-in' element={<Login />} />
             <Route path='/' element={<About />} />
-            <Route path='/roomId/:id' element={<Room />} />
+            <Route 
+                path='/roomId/:id' 
+                element={
+                  <PrivatePage user={currentUser}>
+                    <Room />
+                  </PrivatePage>
+                }
+            />
             <Route path='/roomId/:id/noroom' element={<FourOFour />} />
             <Route path='/error/:name' element={<WentWrong />} />
           </Routes>
