@@ -32,6 +32,8 @@ function About() {
     });
     // navigate("/roomId/" + roomId);
   }
+
+  
   const joinMeeting = () => {
     if(meetingId.trim().length === 0){
       return;

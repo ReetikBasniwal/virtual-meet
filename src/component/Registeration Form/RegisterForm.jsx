@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { isValidEmail } from '../../utils/emailValidator';
 import 'react-toastify/dist/ReactToastify.css';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../../server/firebase';
+import { auth, db } from '../../server/firebase';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../server/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import { writeUserData } from '../../server/createUser';
+import { onValue, ref } from 'firebase/database';
 
 function RegisterForm() {
     const [firstName, setFirstName] = useState("");
@@ -27,7 +28,7 @@ function RegisterForm() {
     }, [currentUser, navigate])
     // const auth = getAuth();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (firstName.trim().length === 0) {
             // setError("noFirstName");
             toast.error("Please enter first name", {
@@ -66,29 +67,30 @@ function RegisterForm() {
             return;
         }
 
-        createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-            // Signed up 
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            console.log(user, "user")
+
             if (user) {
-                toast.success("Successfully signed up!", {
-                    position: 'top-right'
-                })
+                // Write user data to the database
+                await writeUserData(user.uid, firstName, lastName, email);
+
+                toast.success("Successfully signed up!", { position: 'top-right' });
+
+                // Clear form fields
                 setFirstName('');
                 setLasttName('');
                 setPassword('');
                 setConfirmPassword('');
                 setEmail('');
-                writeUserData(user.uid, firstName, lastName, email);
-                return navigate('/');
-            }
 
-        }).catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // ..
-            console.log(errorCode, errorMessage, "ERROR in sign up");
-        });
+                navigate('/');
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("Error during sign-up:", error.message);
+            toast.error("Sign-up failed. Please try again.", { position: 'bottom-left' });
+        }
     }
 
     return (
