@@ -41,7 +41,7 @@ function App() {
 
   return (
     <>
-        <div className="App bg-white dark:bg-gray-900 transition-colors duration-200">
+        <div className="App bg-white dark:bg-gray-900 transition-colors duration-200 text-gray-900 dark:text-gray-100">
           {!isActiveRoom ? <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} /> : <></>}
           <Routes>
             <Route exact path='/sign-up' element={<RegisterForm />} />

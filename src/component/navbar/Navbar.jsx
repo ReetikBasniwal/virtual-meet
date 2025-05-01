@@ -44,7 +44,7 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
       {isActiveRoom ? <></> : (
         <>
         <nav className="flex items-center justify-between p-2 bg-white/80 dark:bg-gray-900/80">
-          <div className='text-4xl text-blue-900 dark:text-blue-400'>V Meet</div>
+          <div className='text-4xl text-primary'>V Meet</div>
           <div className='flex items-center gap-4'>
             <button
               onClick={toggleDarkMode}
@@ -74,7 +74,7 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                  <Link to="/sign-in"> Sign in</Link>
                 </button>
                 <button 
-                  className="font-medium cursor-pointer transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 text-white bg-sky-800/80 hover:bg-sky-800 focus:ring-primary-300 text-sm px-3 py-1.5 gap-1.5" 
+                  className="font-medium cursor-pointer transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 text-white bg-blue-900/90 hover:bg-blue-950 focus:ring-primary-300 text-sm px-3 py-1.5 gap-1.5" 
                   onClick={() => {}}
                 >
                  <Link to="/sign-up"> Sign up</Link>
