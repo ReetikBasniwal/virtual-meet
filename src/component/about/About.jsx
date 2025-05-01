@@ -33,7 +33,7 @@ function About() {
     // navigate("/roomId/" + roomId);
   }
 
-  console.log(currentUser, "currentUser");
+  
   const joinMeeting = () => {
     if(meetingId.trim().length === 0){
       return;
