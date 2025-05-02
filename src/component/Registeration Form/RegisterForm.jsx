@@ -95,7 +95,7 @@ function RegisterForm() {
 
     return (
         <>
-            <div className="absolute inset-0 bg-black/50 flex top-0 items-center justify-center h-full w-full" onClick={() => { navigate('/'); }}>
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                 <div className='visible flex flex-col p-2 bg-white dark:bg-gray-800 rounded-lg' onClick={(e) => e.stopPropagation()} style={{ width: '30em', height: '38em' }}>
                     <div className='p-2 flex items-start justify-between'>
                         <div className="flex flex-col justify-center">
@@ -154,7 +154,7 @@ function RegisterForm() {
                         <button className='cursor-pointer font-medium transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue-900 text-white hover:bg-blue-950 focus:ring-blue-300 text-sm px-4 py-2 gap-2 w-full' onClick={(e) => { e.preventDefault(); handleSubmit() }}>Sign up</button>
                     </form>
                     <div className='flex items-center justify-center h-full w-full text-sm'>
-                        <span className='text-gray-600 dark:text-gray-400'>Already have an account? <Link className="border-b border-sky-500 text-sky-500" to="/sign-in">Sing in</Link></span>
+                        <span className='text-gray-600 dark:text-gray-400'>Already have an account? <Link className="border-b border-sky-500 text-sky-500" to="/sign-in">Sign in</Link></span>
                     </div>
                 </div>
             </div>

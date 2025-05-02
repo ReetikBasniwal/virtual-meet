@@ -52,7 +52,7 @@ function Login() {
 
   return (
     <>
-      <div className="absolute flex flex-col inset-0 bg-black/50 flex top-0 items-center justify-center h-full w-full" onClick={() => { navigate('/'); }}>
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className='visible flex flex-col mb-4 p-4 bg-white dark:bg-gray-800 rounded-lg' onClick={(e) => e.stopPropagation()} style={{width: '30em', height: '22em'}}>
               <div className='p-2 flex justify-between'>
                 <span className='text-2xl font-semibold'>Welcome back</span>
