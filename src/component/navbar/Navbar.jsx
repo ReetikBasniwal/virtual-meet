@@ -5,6 +5,7 @@ import { IoMenu, IoSunnyOutline } from "react-icons/io5";
 import { LuMoon } from "react-icons/lu";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
+import { auth } from "../../server/firebase";
 
 function Navbar({ isDarkMode, toggleDarkMode }) {
   const [currentTime, setCurrentTime] = React.useState("");
@@ -68,7 +69,7 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
     }).catch((error) => {
     // An error happened.
     });
-}
+  }
 
   return (
     <>
@@ -125,18 +126,16 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                     </div>
                   ) : (
                     <div className="hidden sm:flex items-center gap-2">
-                      <button
+                      <div
                         className="font-medium cursor-pointer transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-800 text-sm px-3 py-1.5 gap-1.5"
-                        onClick={() => {}}
                       >
                         <Link to="/sign-in"> Sign in</Link>
-                      </button>
-                      <button
+                      </div>
+                      <div
                         className="font-medium cursor-pointer transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 text-white bg-blue-900/90 hover:bg-blue-950 focus:ring-primary-300 text-sm px-3 py-1.5 gap-1.5"
-                        onClick={() => {}}
                       >
                         <Link to="/sign-up"> Sign up</Link>
-                      </button>
+                      </div>
                     </div>
                   )}
 
@@ -165,7 +164,7 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                       </div>
                       <button
                         onClick={() => {
-                          logout();
+                          handleLogout();
                           setIsMobileMenuOpen(false);
                         }}
                         className="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -176,26 +175,16 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                   ) : (
                     <div className="space-y-2">
                       <button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setAuthModal("signin");
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="w-full"
+                        onClick={() => navigate("/sign-in")}
+                        className="font-medium transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-800 text-xs px-3 py-1.5 gap-1.5 w-full"
                       >
-                        Sign in
+                        <Link to="/sign-in"> Sign in</Link>
                       </button>
                       <button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => {
-                          setAuthModal("signup");
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="w-full"
+                        onClick={() => navigate("/sign-up")}
+                        className="font-medium transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue-900/90 text-white hover:bg-blue-950 focus:ring-blue-300 text-xs px-3 py-1.5 gap-1.5 w-full"
                       >
-                        Sign up
+                        <Link to="/sign-up"> Sign up</Link>
                       </button>
                     </div>
                   )}
