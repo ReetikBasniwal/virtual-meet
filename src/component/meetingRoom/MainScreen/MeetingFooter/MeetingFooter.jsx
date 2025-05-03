@@ -124,8 +124,8 @@ export default function MeetingFooter() {
     
     return (
         <div className="h-full w-full flex items-center justify-between box-border pl-4 pr-4">
-            <div className="timeandid flex items-center gap-2">
-                <CurrentTime /> <div role="separator" className="divider border-l border-black dark:border-white"></div> <span>{id}</span>
+            <div className="timeandid hidden md:flex items-center gap-2">
+                <CurrentTime className="" /> <div role="separator" className="divider border-l border-black dark:border-white"></div> <span>{id}</span>
             </div>
             <div className="controls flex items-center w-100 gap-1">
                 <div className={`${userPrefernce.audio ? 'meetingIcons bg-gray-700/90' : 'redMeetingIcons'}`} onClick={() => togglePreference("audio", !userPrefernce.audio)}>
