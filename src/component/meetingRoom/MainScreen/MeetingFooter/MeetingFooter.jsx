@@ -7,8 +7,9 @@ import { roomActions } from '../../../../redux/reducers/actionreducer';
 import { child, get, ref, remove, update } from 'firebase/database';
 import { db } from '../../../../server/firebase';
 import { useNavigate, useParams } from 'react-router-dom';
-import { MdCallEnd } from 'react-icons/md';
+import { MdCallEnd, MdOutlinePeopleAlt } from 'react-icons/md';
 import { getVideoAudioStream } from '../../../../utils/getStream';
+import { useEffect, useState } from 'react';
 
 export default function MeetingFooter() {
     const participants = useSelector(state => state.roomReducer.participants);
@@ -25,18 +26,14 @@ export default function MeetingFooter() {
     const togglePreference = async (prop, value) => {
         if (mainStream) {
             if (prop === 'video') {
-                if(value){
-                    reInitializeStream(true, userPrefernce.audio);
-                }else {
-                    mainStream.getVideoTracks().forEach((track) => {
-                        if (track.kind === 'video') {
-                            track.stop();
-                        }
-                    });
-                }
+                mainStream.getVideoTracks().forEach((track) => {
+                    if (track.kind === 'video') {
+                        track.enabled = value;
+                    }
+                });
             } else if (prop === 'audio') {
                 mainStream.getAudioTracks()[0].enabled = value
-            }else {
+            } else {
                 value && toggleVideoTrack({video: false, audio: true});
                 reInitializeStream(value ? false: true, true, value ? 'displayStream' : 'userMedia');
             }
@@ -63,7 +60,6 @@ export default function MeetingFooter() {
         }).catch((error) => {
             console.error(error);
         });
-
     }
 
     const reInitializeStream = (video, audio, type='userMedia') => {
@@ -127,19 +123,56 @@ export default function MeetingFooter() {
     }
     
     return (
-        <div className="h-full w-full flex items-center justify-center">
-            <div className={`${userPrefernce.audio ? 'meetingIcons' : 'redMeetingIcons'}`} onClick={() => togglePreference("audio", !userPrefernce.audio)}>
-                {userPrefernce.audio ? <IoMdMic /> : <BsFillMicMuteFill />}
+        <div className="h-full w-full flex items-center justify-between box-border pl-4 pr-4">
+            <div className="timeandid flex items-center gap-2">
+                <CurrentTime /> <div role="separator" className="divider border-l border-black dark:border-white"></div> <span>{id}</span>
             </div>
-            <div className={`${userPrefernce.video ? 'meetingIcons' : 'redMeetingIcons'}`} onClick={() => togglePreference("video", !userPrefernce.video)}>
-                {userPrefernce.video ? <BsCameraVideoFill /> : <BsCameraVideoOffFill />}
+            <div className="controls flex items-center w-100 gap-1">
+                <div className={`${userPrefernce.audio ? 'meetingIcons bg-gray-700/90' : 'redMeetingIcons'}`} onClick={() => togglePreference("audio", !userPrefernce.audio)}>
+                    {userPrefernce.audio ? <IoMdMic size={20} /> : <BsFillMicMuteFill size={20} />}
+                </div>
+                <div className={`${userPrefernce.video ? 'meetingIcons bg-gray-700/90' : 'redMeetingIcons'}`} onClick={() => togglePreference("video", !userPrefernce.video)}>
+                    {userPrefernce.video ? <BsCameraVideoFill size={20} /> : <BsCameraVideoOffFill size={20} />}
+                </div>
+                <div className={`${userPrefernce.screen ? 'meetingIcons bg-gray-700/90' : 'redMeetingIcons'}`} onClick={() => togglePreference("screen", !userPrefernce.screen)}>
+                    {userPrefernce.screen ? <TbScreenShare size={20} /> : <TbScreenShareOff size={20} />}
+                </div>
+                <div className='redMeetingIcons' onClick={hangupCall}>
+                    <MdCallEnd />   
+                </div>
             </div>
-            <div className={`${userPrefernce.screen ? 'meetingIcons' : 'redMeetingIcons'}`} onClick={() => togglePreference("screen", !userPrefernce.screen)}>
-                {userPrefernce.screen ? <TbScreenShare /> : <TbScreenShareOff />}
-            </div>
-            <div className='redMeetingIcons' onClick={hangupCall}>
-                <MdCallEnd />   
+            <div className="particount relative w-9 h-11 flex items-end justify-start">
+                <div className="absolute top-0 right-0 rounded-full w-5 h-5 flex items-center justify-center bg-gray-600">
+                    <span className="text-white text-xs">{Object.keys(participants).length}</span>
+                </div>
+                <MdOutlinePeopleAlt size={23} />
             </div>
         </div>
+    )
+}
+
+
+const CurrentTime = () => {
+    const [time, setTime] = useState('');
+
+    useEffect(() => {
+        const updateTime = () => {
+            const now = new Date();
+            const formattedTime = now.toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            });
+            setTime(formattedTime);
+          };
+      
+          updateTime(); // initial call
+          const intervalId = setInterval(updateTime, 1000); // update every second
+      
+          return () => clearInterval(intervalId); // cleanup on unmount
+    }, []);
+
+    return (
+        <span>{time}</span>
     )
 }
