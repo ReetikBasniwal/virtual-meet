@@ -25,18 +25,14 @@ export default function MeetingFooter() {
     const togglePreference = async (prop, value) => {
         if (mainStream) {
             if (prop === 'video') {
-                if(value){
-                    reInitializeStream(true, userPrefernce.audio);
-                }else {
-                    mainStream.getVideoTracks().forEach((track) => {
-                        if (track.kind === 'video') {
-                            track.stop();
-                        }
-                    });
-                }
+                mainStream.getVideoTracks().forEach((track) => {
+                    if (track.kind === 'video') {
+                        track.enabled = value;
+                    }
+                });
             } else if (prop === 'audio') {
                 mainStream.getAudioTracks()[0].enabled = value
-            }else {
+            } else {
                 value && toggleVideoTrack({video: false, audio: true});
                 reInitializeStream(value ? false: true, true, value ? 'displayStream' : 'userMedia');
             }
@@ -63,7 +59,6 @@ export default function MeetingFooter() {
         }).catch((error) => {
             console.error(error);
         });
-
     }
 
     const reInitializeStream = (video, audio, type='userMedia') => {

@@ -37,7 +37,7 @@ export default function Room() {
         dispatch(roomActions.setMainStream(mediaStream))
         // console.log(mediaStream, "media stream")
       }).catch((error) => {
-        console.error(error, " permission denied for media")
+        console.error(error, "permission denied for media")
       })
 
       let newParticipantRef = null;
