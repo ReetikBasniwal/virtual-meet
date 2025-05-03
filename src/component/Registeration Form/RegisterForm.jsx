@@ -16,8 +16,9 @@ function RegisterForm() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const { currentUser } = useContext(AuthContext);
+    const [error, setError] = React.useState('');
+
     const navigate = useNavigate();
-    // const [error, setError] = useState("");
 
     useEffect(() => {
         if (currentUser) {
@@ -30,37 +31,42 @@ function RegisterForm() {
 
     const handleSubmit = async () => {
         if (firstName.trim().length === 0) {
-            // setError("noFirstName");
+            setError("Please enter the first name.");
             toast.error("Please enter first name", {
                 position: 'bottom-left'
             })
             return;
         }
         if (lastName.trim().length === 0) {
+            setError("Please enter the last name.");
             toast.error("Please enter last name", {
                 position: 'bottom-left'
             })
             return;
         }
         if(email.trim().length === 0){
-            toast.error("Please enter email", {
+            setError("Please enter the email.");
+            toast.error("Please enter the email", {
                 position: 'bottom-left'
             })
             return;
         }
         if (!isValidEmail(email)) {
+            setError("Plase enter a valid email.");
             toast.error("Please enter a valid email", {
                 position: 'bottom-left'
             })
             return;
         }
         if (password.trim().length === 0 || password.trim().length < 8) {
+            setError("Password should conatin at least 8 characters.");
             toast.error("Password should conatin at least 8 characters", {
                 position: 'bottom-left'
             })
             return;
         }
         if (password !== confirmPassword) {
+            setError("Password and confirm password should be same.");
             toast.error("Password and confirm ", {
                 position: 'bottom-left'
             })
@@ -88,6 +94,7 @@ function RegisterForm() {
                 window.location.reload();
             }
         } catch (error) {
+            setError(error.message);
             console.error("Error during sign-up:", error.message);
             toast.error("Sign-up failed. Please try again.", { position: 'bottom-left' });
         }
@@ -151,6 +158,9 @@ function RegisterForm() {
                             required
                             autoComplete='off'
                         />
+                        {error && (
+                            <p className="text-sm pb-2 text-red-500">{error}</p>
+                        )}
                         <button className='cursor-pointer font-medium transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue-900 text-white hover:bg-blue-950 focus:ring-blue-300 text-sm px-4 py-2 gap-2 w-full' onClick={(e) => { e.preventDefault(); handleSubmit() }}>Sign up</button>
                     </form>
                     <div className='flex items-center justify-center h-full w-full text-sm'>
