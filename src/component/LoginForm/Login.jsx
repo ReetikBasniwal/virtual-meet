@@ -12,6 +12,8 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { currentUser } = useContext(AuthContext);
+    const [error, setError] = useState("");
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,6 +26,7 @@ function Login() {
     
     const handleSignIn = () => {
       if(!isValidEmail(email)){
+        setError("Invalid email");
         console.log("wrong email")
         return;
       }
@@ -35,11 +38,13 @@ function Login() {
         toast.success("Successfully loged in!", {
           position: 'top-right'
         })
+        setError("");
         console.log(user)
         navigate('/');
         // ...
       })
       .catch((error) => {
+        setError(error.message);
         const errorCode = error.code;
         const errorMessage = error.message;
         toast.error("Invalid email or password", {
@@ -73,6 +78,9 @@ function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  {error && (
+                      <p className="text-sm pb-2 text-red-500">{error}</p>
+                  )}
                   <button className='cursor-pointer font-medium transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue-900 text-white hover:bg-blue-950 focus:ring-blue-300 text-sm px-4 py-2 gap-2 w-full' onClick={handleSignIn}>Sign in</button>
               </form>
               <div className='flex items-center justify-center h-full w-full'>

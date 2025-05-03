@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../server/AuthContext";
-import SignOut from "../signOut/SignOut";
 import { useSelector } from "react-redux";
 import { IoMenu, IoSunnyOutline } from "react-icons/io5";
 import { LuMoon } from "react-icons/lu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
 
 function Navbar({ isDarkMode, toggleDarkMode }) {
   const [currentTime, setCurrentTime] = React.useState("");
   const { currentUser } = useContext(AuthContext);
-  const [signOut, setShowSignOut] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const { isActiveRoom } = useSelector((state) => state.roomReducer);
 
@@ -60,6 +60,16 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
     };
   }, []);
 
+  const handleLogout = () => {               
+    signOut(auth).then(() => {
+    // Sign-out successful.
+        navigate("/");
+        console.log("Signed out successfully")
+    }).catch((error) => {
+    // An error happened.
+    });
+}
+
   return (
     <>
       {isActiveRoom ? (
@@ -103,7 +113,7 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                             aria-orientation="vertical"
                           >
                             <button
-                              onClick={logout}
+                              onClick={() => handleLogout()}
                               className="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                               role="menuitem"
                             >
