@@ -164,7 +164,7 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                       </div>
                       <button
                         onClick={() => {
-                          logout();
+                          handleLogout();
                           setIsMobileMenuOpen(false);
                         }}
                         className="w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -174,16 +174,18 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <div
-                        className="w-full flex items-center justify-center"
+                      <button
+                        onClick={() => navigate("/sign-in")}
+                        className="font-medium transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-800 text-xs px-3 py-1.5 gap-1.5 w-full"
                       >
                         <Link to="/sign-in"> Sign in</Link>
-                      </div>
-                      <div
-                        className="w-full flex items-center justify-center"
+                      </button>
+                      <button
+                        onClick={() => navigate("/sign-up")}
+                        className="font-medium transition-all duration-200 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 bg-blue-900/90 text-white hover:bg-blue-950 focus:ring-blue-300 text-xs px-3 py-1.5 gap-1.5 w-full"
                       >
                         <Link to="/sign-up"> Sign up</Link>
-                      </div>
+                      </button>
                     </div>
                   )}
                 </div>
