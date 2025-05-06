@@ -108,18 +108,43 @@ export default function MeetingFooter() {
     }
 
     const hangupCall = () => {
+        // Stop all tracks in the main stream
+        if (mainStream) {
+            mainStream.getTracks().forEach(track => {
+                track.stop();
+            });
+        }
+
+        // Close all peer connections and stop their tracks
+        Object.values(participants).forEach(participant => {
+            if (participant.peerConnection) {
+                // Stop all tracks in the peer connection
+                participant.peerConnection.getSenders().forEach(sender => {
+                    if (sender.track) {
+                        sender.track.stop();
+                    }
+                });
+                // Close the peer connection
+                participant.peerConnection.close();
+            }
+        });
+
+        // Remove participant from Firebase
         if (Object.keys(user)[0]) {
             const participantRef = child(roomRef, `/participants/${Object.keys(user)[0]}`);
             remove(participantRef).then(() => {
-              console.log("Participant removed on end call");
-              navigate('/');
+                console.log("Participant removed on end call");
+                // navigate('/');
             }).catch(error => {
-              console.error("Error removing participant on end call: ", error);
+                console.error("Error removing participant on end call: ", error);
             });
         }
+
+        // Reset Redux state
         dispatch(roomActions.resetParticipant({}));
+        dispatch(roomActions.setMainStream(null));
+        dispatch(roomActions.setisRoomActive(false));
         navigate('/');
-        dispatch(roomActions.setisRoomActive(true));
     }
     
     return (

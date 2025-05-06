@@ -20,8 +20,18 @@ const stunServers = {
                 "stun:stun2.l.google.com:19302",
                 "stun:stun.services.mozilla.com"
             ]
+        },
+        {
+            urls: [
+                "turn:openrelay.metered.ca:80",
+                "turn:openrelay.metered.ca:443",
+                "turn:openrelay.metered.ca:443?transport=tcp"
+            ],
+            username: "openrelayproject",
+            credential: "openrelayproject"
         }
-    ]
+    ],
+    iceCandidatePoolSize: 10
 }
 
 export const initializeRoom = createAsyncThunk(
@@ -86,9 +96,27 @@ export const roomActions = actionSlice.actions;
 
 const addConection = (currentUser, newUser, mediaStream, roomId) => {
     const peerConnection = new RTCPeerConnection(stunServers);
+    
+    // Add connection state monitoring
+    peerConnection.onconnectionstatechange = (event) => {
+        console.log('Connection state:', peerConnection.connectionState);
+        if (peerConnection.connectionState === 'failed') {
+            console.log('Connection failed, attempting to restart ICE...');
+            peerConnection.restartIce();
+        }
+    };
+
+    peerConnection.oniceconnectionstatechange = (event) => {
+        console.log('ICE connection state:', peerConnection.iceConnectionState);
+    };
+
+    peerConnection.onicegatheringstatechange = (event) => {
+        console.log('ICE gathering state:', peerConnection.iceGatheringState);
+    };
+
     mediaStream.getTracks().forEach((track) => {
         peerConnection.addTrack(track, mediaStream);
-    })
+    });
     
     const currentUseKey = Object.keys(currentUser)[0];
     const newUseKey = Object.keys(newUser)[0];
